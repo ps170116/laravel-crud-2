@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\ProfileController;
+use App\Models\Author;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +21,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('authors', AuthorController::class);
+Route::resource('books', BookController::class);
+
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,7 +38,12 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/', function () {
             return view('/admin/adminpage');
         });
+
     });
+});
+
+Route::Get('test', function () {
+    dd(Author::first()->books);
 });
 
 
