@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Author;
+use Generator;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -20,7 +22,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        $authors = Author::all();
+        return view('books.create', compact('authors'));
     }
 
     /**
@@ -28,7 +31,13 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $Book = new Book;
+        $Book->title = $request->title;
+        $Book->description = $request->description;
+        $Book->author_id = $request->author_id;
+        $Book->release_date = $request->release_date;
+        $Book->save();
+        return redirect('books');
     }
 
     /**
@@ -36,7 +45,7 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        return view('books.show', compact('book'));
     }
 
     /**
@@ -44,7 +53,8 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
-        //
+        $authors = Author::all();
+        return view('books.edit', compact('book', 'authors'));
     }
 
     /**
@@ -52,7 +62,15 @@ class BookController extends Controller
      */
     public function update(Request $request, Book $book)
     {
-        //
+        $fields = $request->validate(
+            [
+                'title' => 'required',
+                'description' => 'required',
+                'author_id' => 'required',
+                'release_date' => 'required',
+            ]);
+            $book->update($fields);
+            return redirect('books');
     }
 
     /**
@@ -60,6 +78,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        //
+        $book->delete();
+        return redirect(('/books'));
+
     }
 }

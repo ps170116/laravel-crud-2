@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('description');
+            $table->date('release_date');
             $table->foreignId('author_id')->constrained();
             $table->timestamps();
         });
